@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>人物步态检查</title><style>
+*{box-sizing:border-box}body{margin:0;background:#24241e;color:#e7dbc0;font:14px/1.5 system-ui}header{display:flex;align-items:center;gap:14px;padding:12px 20px;flex-wrap:wrap}button{min-height:44px;background:#3e392b;border:1px solid #96825a;color:inherit;padding:7px 20px;font:inherit}canvas{display:block;width:100%;height:auto;background:#c4b99b}span{color:#bfb190}
+</style></head><body><header><b>关节步态检查</b><button id="play">暂停</button><button id="turn">转身</button><button id="stop">停下／继续</button><span id="status">载入素材…</span></header><canvas id="preview" width="1200" height="510" aria-label="主角、妻子、警察的连续步态"></canvas><canvas id="phases" width="1600" height="360" aria-label="同一步态的八个连续姿势"></canvas>
+<script type="module">
+import { createGait, advanceGait, gaitPose } from '../locomotion.js';
+import { createActorRenderer } from '../actor-renderer.js';
+const names=['hero','wife','inspector'], heights=[280,260,280], images=await Promise.all(names.map(name=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=`../assets/mobile/${name}.png`})));
+const renderer=createActorRenderer(), canvas=document.getElementById('preview'), ctx=canvas.getContext('2d'), strip=document.getElementById('phases'), pctx=strip.getContext('2d');
+let playing=true,moving=true,facing=1,elapsed=0,last=performance.now();
+const actors=names.map((name,i)=>({name,x:200+i*400,face:1,walk:1,reach:0,crouch:0,opacity:1,gait:createGait(200+i*400,1)}));
+document.getElementById('play').onclick=()=>{playing=!playing;document.getElementById('play').textContent=playing?'暂停':'播放'};
+document.getElementById('turn').onclick=()=>{facing*=-1};document.getElementById('stop').onclick=()=>{moving=!moving};
+function background(c,w,h){c.fillStyle='#c4b99b';c.fillRect(0,0,w,h);c.strokeStyle='#80765d55';c.lineWidth=1;for(let x=0;x<w;x+=25){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke()}c.strokeStyle='#4d4a3b';c.beginPath();c.moveTo(0,h-50);c.lineTo(w,h-50);c.stroke()}
+let sheetDrawn=false;
+function drawSheet(){background(pctx,strip.width,strip.height);const gait=createGait(0,1);let x=0;for(let f=0;f<8;f++){for(let tick=0;tick<10;tick++){x+=130/60;advanceGait(gait,{x,facing:1,dt:1/60,height:240,moving:true})}const pose=gaitPose(gait,{x,y:310,height:240,crouch:0});pctx.save();pctx.translate(100+f*200-x,0);renderer.draw(pctx,'hero',images[0],{face:1,opacity:1,reach:0},pose,240);pctx.restore();pctx.fillStyle='#3c3c31';pctx.font='14px system-ui';pctx.fillText(String(f+1),95+f*200,340)}sheetDrawn=true}
+function tick(){const now=performance.now(),dt=Math.min(.04,(now-last)/1000);last=now;if(playing)elapsed+=dt;background(ctx,1200,510);actors.forEach((actor,i)=>{const h=heights[i],root=200+i*400;actor.face=facing;if(playing){if(moving)actor.x+=facing*dt*130;advanceGait(actor.gait,{x:actor.x,facing,dt,height:h,moving});}const pose=gaitPose(actor.gait,{x:actor.x,y:460,height:h,crouch:0});ctx.save();ctx.translate(root-actor.x,0);renderer.draw(ctx,actor.name,images[i],actor,pose,h);ctx.restore();ctx.fillStyle='#34382c';ctx.font='16px system-ui';ctx.fillText(['叙述者','妻子','警察'][i],root-25,495)});document.getElementById('status').textContent=`${moving?'行走':'收步'} · ${elapsed.toFixed(1)}s`;if(!sheetDrawn)drawSheet();requestAnimationFrame(tick)}tick();
+window.gaitPreview={actors,images,renderer,ctx,canvas,get playing(){return playing}};
+</script></body></html>

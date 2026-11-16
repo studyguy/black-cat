@@ -1,0 +1,30 @@
+# Local history, extracted source text, and private analysis
+/archive/
+/novel_fulltext.txt
+/analysis/SOURCE_BIBLE.md
+/_progress.md
+
+# Generation inputs, raw outputs, machine-local reports, and backup scripts
+/_tools/
+/qa/
+/build/app/assets/mobile/source/
+/build/app/assets/mobile/agent-delivery/
+/build/app/assets/mobile/manifest*.json
+/build/app/assets/mobile/mobile-supplement.json
+/build/app/assets/mobile/sprite-magenta-clean-report.json
+/build/app/assets/mobile/cellar-empty-retouched.png
+/build/app/assets/mobile/cellar-empty.jpg
+/build/app/assets/mobile/cat-sheet.png
+/build/app/assets/mobile/door.png
+/build/app/assets/mobile/source/sprite-before-magenta-clean/
+
+# Old-version visual targets, not used by the mobile build
+/design/targets/
+
+# Local development artifacts
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+!.env.example

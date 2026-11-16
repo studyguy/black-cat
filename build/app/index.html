@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#171511">
+  <title>黑猫 · 墙中之声</title>
+  <link rel="stylesheet" href="mobile.css?v=2">
+</head>
+<body>
+  <main id="game" aria-label="黑猫：墙中之声">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">◒</span><div>黑猫<small>THE BLACK CAT</small></div></div>
+      <div class="chapter-info"><span id="chapter">第一幕 · 家宅</span><b id="goal">等候记忆醒来</b></div>
+      <div class="tools"><button id="sound" aria-label="切换音效" title="音效">声音 开</button><button id="pause" aria-label="暂停游戏">Ⅱ</button></div>
+    </header>
+    <section id="viewport" aria-label="可触摸的场景">
+      <div id="world">
+        <canvas id="scene" width="1200" height="685" aria-label="角色和环境动画"></canvas>
+        <div id="targets" aria-label="场景交互目标"></div>
+        <div id="transition" aria-hidden="true"><span id="transition-title"></span><small id="transition-sub"></small></div>
+      </div>
+      <div id="speech" role="status" aria-live="polite" hidden><span id="speaker"></span><p id="speech-text"></p><button id="speech-close" aria-label="收起对白">×</button></div>
+      <div id="scene-caption" aria-hidden="true">1843 · 一段没有写完的供述</div>
+    </section>
+    <footer class="bottom-bar">
+      <div class="touch-guide"><span class="touch-dot"></span><span id="guide">点地面行走 · 点物件走近互动</span></div>
+      <nav id="actions" aria-label="当前可执行动作"></nav>
+    </footer>
+    <section id="title-screen" class="screen title-screen">
+      <div class="title-art" aria-hidden="true"></div><div class="title-shade" aria-hidden="true"></div>
+      <div class="title-content"><span class="eyebrow">EDGAR ALLAN POE · 1843</span><h1>黑猫</h1><div class="title-rule"></div><h2>墙中之声</h2><p>门开了。它还跟在你身后。</p><button id="start" class="primary">走进这段记忆 <span>→</span></button><button id="continue" class="quiet" hidden>接着上次的记忆</button><small>点击行走 / 场景互动 / 多种结局<br>横屏体验更佳 · 竖屏也可游玩</small><span class="content-note">含原著中的暴力与死亡暗示，画面克制呈现。</span></div>
+    </section>
+    <section id="ending" class="screen ending-screen" hidden><span class="eyebrow" id="ending-number"></span><h1 id="ending-title"></h1><p id="ending-copy"></p><div id="ending-facts"></div><button id="restart" class="primary">重新开始 <span>↺</span></button></section>
+    <section id="pause-screen" class="screen pause-screen" hidden><span class="eyebrow">记忆停在这里</span><h2>暂停</h2><button id="resume" class="primary">回到场景</button><button id="new-game" class="quiet">从头开始</button><button id="journal" class="quiet">翻看手记</button><div id="journal-text" hidden></div></section>
+    <div id="error" role="alert" hidden></div>
+  </main>
+  <script type="module" src="mobile.js?v=3"></script>
+</body>
+</html>
